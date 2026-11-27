@@ -9,7 +9,10 @@ Out of scope: alerts, moderation, sightings, frontend
 - [ ] Create a post returns a manage token once; only its hash is stored.
 - [ ] Points outside Serbia are rejected (422).
 - [ ] Photos are re-encoded to WebP, resized, EXIF removed; max 3 per post.
-- [ ] Bbox listing uses the PostGIS index and excludes expired, removed and rejected posts.
+- [ ] Public queries repeat the partial-index predicate `status='active' AND moderation IN ('pending','approved')`; held and rejected posts never appear in listings or on the post page.
+- [ ] Public responses round the last-seen point to 3 decimals (about 100 m); the exact point is used only internally for radius and alerts.
+- [ ] Field limits from the schema (name 80, description 2000, contact 3-200) are validated in the API with clear 422 errors before the database does.
+- [ ] Check with EXPLAIN on a realistic volume (for example 50k generated posts) that the bbox query uses the spatial partial index.
 - [ ] Wrong or missing token gives 401 on PATCH/DELETE/renew.
 - [ ] Posts expire automatically (default 30 days).
 

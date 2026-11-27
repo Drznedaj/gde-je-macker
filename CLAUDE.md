@@ -28,6 +28,10 @@ PM writes `docs/stories/NNN-*.md` -> dev agent implements on a branch -> QA agen
 ## Commits
 Use the repo-local git identity (GitHub no-reply). Sign off commits (`-s`). Never push; the human pushes.
 
+## Local environment
+- Docker runs through Rancher Desktop; use `make db-up` / `make db-migrate` (the Makefile detects `docker compose` vs `docker-compose`).
+- Agents run in Claude Code on the owner's machine; the PM chat cannot run Docker.
+
 ## Checks (once code exists)
 - Go: `cd server && go vet ./... && go test ./...`
 - SQL: migrations apply cleanly to an empty Postgres+PostGIS.

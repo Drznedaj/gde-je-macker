@@ -35,7 +35,7 @@ paths:
         "415": { description: Unsupported type }
   /posts:
     get:
-      summary: List active, non-rejected posts in a bounding box
+      summary: List active posts in a bounding box (moderation pending or approved; held and rejected are hidden)
       parameters:
         - { name: bbox, in: query, required: true, description: "west,south,east,north", schema: { type: string } }
         - { name: kind, in: query, schema: { $ref: "#/components/schemas/Kind" } }
@@ -221,7 +221,9 @@ components:
         goes_outside: { $ref: "#/components/schemas/TriState" }
         name: { type: string }
         description: { type: string }
-        last_seen_point: { $ref: "#/components/schemas/Point" }
+        last_seen_point:
+          allOf: [ { $ref: "#/components/schemas/Point" } ]
+          description: "Rounded to 3 decimals (about 100 m) in public responses. The exact point is never served (ADR 0002)."
         last_seen_at: { type: string, format: date-time }
         contact: { type: string }
         radius_m: { type: integer }
@@ -245,5 +247,11 @@ components:
         auth: { type: string }
         cells:
           type: array
+          minItems: 1
           maxItems: 200
           items: { type: string, description: "geohash, precision 5 or 6" }
+        lang: { type: string, enum: [sr-Latn, sr-Cyrl, en], default: sr-Latn }
+        species_filter:
+          type: array
+          description: "Omit for all species."
+          items: { $ref: "#/components/schemas/Species" }
