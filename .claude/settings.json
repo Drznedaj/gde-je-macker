@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status*)", "Bash(git diff*)", "Bash(git log*)", "Bash(git fetch*)",
+      "Bash(git pull --ff-only*)", "Bash(git checkout -b feature/*)", "Bash(git checkout feature/*)",
+      "Bash(git switch*)", "Bash(git add*)", "Bash(git commit*)",
+      "Bash(git push -u origin feature/*)", "Bash(git push origin feature/*)",
+      "Bash(gh pr create*)", "Bash(gh pr view*)", "Bash(gh pr diff*)", "Bash(gh pr checks*)",
+      "Bash(gh pr comment*)", "Bash(gh pr edit*)", "Bash(gh pr list*)",
+      "Bash(gh pr merge --auto --squash --delete-branch*)",
+      "Bash(gh run list*)", "Bash(gh run view*)", "Bash(gh auth status*)",
+      "Bash(make *)", "Bash(go *)", "Bash(python3 *)"
+    ],
+    "deny": [
+      "Bash(git push origin main*)", "Bash(git push * main*)", "Bash(git push --force*)",
+      "Bash(git push -f*)", "Bash(git push --delete*)", "Bash(git reset --hard*)",
+      "Bash(gh pr merge --admin*)", "Bash(gh pr merge --squash --admin*)",
+      "Bash(gh api*)", "Bash(gh repo*)", "Bash(gh secret*)", "Bash(rm -rf*)"
+    ]
+  }
+}
