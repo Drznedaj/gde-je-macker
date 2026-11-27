@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-go@v5
         if: hashFiles('server/go.mod') != ''
         with:
-          go-version: stable
+          go-version-file: server/go.mod
       - name: Go vet and test
         if: hashFiles('server/go.mod') != ''
         working-directory: server

@@ -4,7 +4,9 @@ package httpapi
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"log/slog"
+	"net"
 	"net/http"
 	"time"
 )
@@ -15,20 +17,21 @@ type Pinger interface {
 }
 
 // NewRouter builds the HTTP handler. Requests are logged without bodies,
-// query strings or client addresses.
+// query strings, raw paths or client addresses.
 func NewRouter(db Pinger, log *slog.Logger) http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /healthz", healthz(db))
+	mux.HandleFunc("GET /healthz", healthz(db, log))
 	return logging(log, mux)
 }
 
-func healthz(db Pinger) http.HandlerFunc {
+func healthz(db Pinger, log *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
 		defer cancel()
 		status, dbStatus := http.StatusOK, "ok"
 		if err := db.Ping(ctx); err != nil {
 			status, dbStatus = http.StatusServiceUnavailable, "down"
+			log.Warn("db ping failed", "reason", SafeErr(err))
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(status)
@@ -37,6 +40,33 @@ func healthz(db Pinger) http.HandlerFunc {
 			"db":     dbStatus,
 		})
 	}
+}
+
+// SafeErr maps an error to a fixed category. Raw error text can contain the
+// DSN, host or credentials, so it is never logged.
+func SafeErr(err error) string {
+	var ne net.Error
+	switch {
+	case err == nil:
+		return ""
+	case errors.Is(err, context.DeadlineExceeded):
+		return "timeout"
+	case errors.Is(err, context.Canceled):
+		return "canceled"
+	case errors.As(err, &ne):
+		return "network error"
+	default:
+		return "database error"
+	}
+}
+
+// route returns the matched mux pattern, never the raw path, so tokens and
+// ids in URLs cannot reach the logs.
+func route(r *http.Request) string {
+	if r.Pattern == "" {
+		return "unmatched"
+	}
+	return r.Pattern
 }
 
 type statusWriter struct {
@@ -56,7 +86,7 @@ func logging(log *slog.Logger, next http.Handler) http.Handler {
 		next.ServeHTTP(sw, r)
 		log.Info("request",
 			"method", r.Method,
-			"path", r.URL.Path,
+			"route", route(r),
 			"status", sw.status,
 			"duration_ms", time.Since(start).Milliseconds(),
 		)

@@ -1,6 +1,8 @@
 package httpapi
 
 import (
+	"bytes"
+	"strings"
 	"context"
 	"errors"
 	"io"
@@ -36,6 +38,45 @@ func TestHealthzDown(t *testing.T) {
 func TestHealthzOKWithFake(t *testing.T) {
 	if c := get(t, fakeDB{}); c != http.StatusOK {
 		t.Fatalf("got %d", c)
+	}
+}
+
+func TestAccessLogUsesRoutePatternNotPath(t *testing.T) {
+	var buf bytes.Buffer
+	log := slog.New(slog.NewTextHandler(&buf, nil))
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /posts/{id}/manage/{token}", func(w http.ResponseWriter, r *http.Request) {})
+	h := logging(log, mux)
+	const secret = "s3cr3t-T0KEN-abc123"
+	h.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest("GET", "/posts/42/manage/"+secret+"?t="+secret, nil))
+	h.ServeHTTP(httptest.NewRecorder(), httptest.NewRequest("GET", "/nope/"+secret, nil))
+	out := buf.String()
+	if strings.Contains(out, secret) {
+		t.Fatalf("log leaked token: %s", out)
+	}
+	if !strings.Contains(out, "/posts/{id}/manage/{token}") || !strings.Contains(out, "unmatched") {
+		t.Fatalf("route pattern missing: %s", out)
+	}
+}
+
+func TestPingErrorLogIsSanitized(t *testing.T) {
+	var buf bytes.Buffer
+	log := slog.New(slog.NewTextHandler(&buf, nil))
+	dsn := "postgres://macker:hunter2@db.internal.example:5432/macker"
+	pingErr := errors.New("failed to connect to " + dsn + ": password hunter2 host db.internal.example")
+	rec := httptest.NewRecorder()
+	NewRouter(fakeDB{err: pingErr}, log).ServeHTTP(rec, httptest.NewRequest("GET", "/healthz", nil))
+	out := buf.String()
+	for _, bad := range []string{"hunter2", "db.internal.example", "postgres://", "macker:"} {
+		if strings.Contains(out, bad) {
+			t.Fatalf("log leaked %q: %s", bad, out)
+		}
+	}
+	if !strings.Contains(out, "db ping failed") {
+		t.Fatalf("ping failure not logged: %s", out)
+	}
+	if strings.Contains(rec.Body.String(), "hunter2") {
+		t.Fatal("response leaked credentials")
 	}
 }
 

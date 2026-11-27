@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -41,11 +42,26 @@ func run(log *slog.Logger) error {
 	srv := &http.Server{
 		Addr:              ":" + cfg.Port,
 		Handler:           httpapi.NewRouter(pool, log),
-		ReadHeaderTimeout: 5 * time.Second,
+		ReadHeaderTimeout: cfg.ReadHeaderTimeout,
+		ReadTimeout:       cfg.ReadTimeout,
+		WriteTimeout:      cfg.WriteTimeout,
+		IdleTimeout:       cfg.IdleTimeout,
 	}
-	errc := make(chan error, 1)
-	go func() { errc <- srv.ListenAndServe() }()
 	log.Info("listening", "port", cfg.Port)
+	return serve(ctx, srv, nil, cfg.ShutdownTimeout, log)
+}
+
+// serve runs srv (on ln if given) until it fails or ctx is done, then shuts
+// down gracefully within shutdownTimeout.
+func serve(ctx context.Context, srv *http.Server, ln net.Listener, shutdownTimeout time.Duration, log *slog.Logger) error {
+	errc := make(chan error, 1)
+	go func() {
+		if ln != nil {
+			errc <- srv.Serve(ln)
+			return
+		}
+		errc <- srv.ListenAndServe()
+	}()
 
 	select {
 	case err := <-errc:
@@ -53,7 +69,7 @@ func run(log *slog.Logger) error {
 	case <-ctx.Done():
 	}
 	log.Info("shutting down")
-	sctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	sctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 	defer cancel()
 	if err := srv.Shutdown(sctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return err
