@@ -3,7 +3,7 @@
 COMPOSE ?= $(shell docker compose version >/dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
 PSQL = $(COMPOSE) exec -T db psql -U macker -d macker -v ON_ERROR_STOP=1 -q
 
-.PHONY: db-up db-down db-migrate db-reset db-psql
+.PHONY: run test db-up db-down db-migrate db-reset db-psql
 
 db-up:        ## start Postgres+PostGIS and wait until it accepts connections
 	$(COMPOSE) up -d
@@ -29,3 +29,9 @@ db-reset:     ## wipe all local data and re-apply migrations
 
 db-psql:      ## open a psql shell
 	$(COMPOSE) exec db psql -U macker -d macker
+
+run:          ## run the API server locally (needs make db-up)
+	cd server && go run ./cmd/server
+
+test:         ## go vet + go test
+	cd server && go vet ./... && go test ./...
