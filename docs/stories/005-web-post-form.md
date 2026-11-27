@@ -13,7 +13,7 @@ Depends on: story 004 (map, i18n, api.js)
 - [ ] Validation mirrors server limits (name 80, description 2000, contact 3-200) with localized messages.
 - [ ] After success, the manage token is shown once with a clear "save this link" instruction and stored only in localStorage on the device.
 - [ ] Edit, renew and mark-reunited flows use the manage token.
-- [ ] Posters are told the contact is public.
+- [ ] Posters are told the contact is public. If ADR 0003 is accepted before this story starts, contact is optional and story 012 adds the hint and message box; otherwise keep it required.
 
 ## Report back (under 200 words)
 Summary, files touched, open questions.
