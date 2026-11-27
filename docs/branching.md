@@ -14,7 +14,7 @@
 - Sign off every commit (`git commit -s`, DCO). Keep commits small; several per story is normal.
 
 ## Who does what
-Automated with `/ship <story-id>` (see `.claude/commands/ship.md`): dev agent branches, commits and pushes; PR is opened with `gh`; qa and reviewer agents post PASS/FAIL verdicts as PR comments; the PR auto-merges (squash) when both pass and required checks are green. PRs touching sensitive paths (migrations, CI, agent config, radius config, ADRs, token/photo/contact handling) get the `needs-human` label and wait for the owner. The owner spot-checks merged PRs at sprint end.
+Automated with `/story <story-id>` (see `.claude/commands/story.md`): dev agent branches, commits and pushes; PR is opened with `gh`; qa and reviewer agents post PASS/FAIL verdicts as PR comments; the PR auto-merges (squash) when both pass and required checks are green. PRs touching sensitive paths (migrations, CI, agent config, radius config, ADRs, token/photo/contact handling) get the `needs-human` label and wait for the owner. The owner spot-checks merged PRs at sprint end.
 
 Max two fix rounds per story; after that the PM (chat) re-scopes the story. Releases are tags (`vX.Y.Z`) on `main`.
 

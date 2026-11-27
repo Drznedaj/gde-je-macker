@@ -23,7 +23,7 @@ Go (stdlib net/http or chi, pgx, sqlc, goose-style SQL migrations) · Postgres 1
 6. Prefer the standard library and tiny dependencies. Use scripts, not LLM calls, for deterministic work.
 
 ## Flow
-PM writes `docs/stories/NNN-*.md` -> dev agent implements on a branch -> QA agent tests against the acceptance criteria -> reviewer (read-only) comments -> auto-merge when checks and verdicts pass, otherwise the human. Run it with `/ship <story-id>` (`.claude/commands/ship.md`). Production deploys are manual. Full rules: docs/branching.md.
+PM writes `docs/stories/NNN-*.md` -> dev agent implements on a branch -> QA agent tests against the acceptance criteria -> reviewer (read-only) comments -> auto-merge when checks and verdicts pass, otherwise the human. Run it with `/story <story-id>` (`.claude/commands/story.md`). Production deploys are manual. Full rules: docs/branching.md.
 
 ## Commits
 Use the repo-local git identity (GitHub no-reply). Sign off commits (`-s`). Branch yourself: `feature/<story-id>-<short-name>` from the latest `main` (see docs/branching.md). Commit message = one short imperative sentence. Agents may push `feature/*` branches and open PRs; never push or commit to `main`, never force-push, never merge with admin override.
