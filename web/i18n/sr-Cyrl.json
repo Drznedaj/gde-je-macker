@@ -1,0 +1,12 @@
+{
+ "tagline":"Мапа изгубљених и пронађених љубимаца","language":"Језик","filters":"Филтери",
+ "kind":"Врста огласа","kind.all":"Сви","kind.lost":"Изгубљен","kind.found":"Пронађен",
+ "species":"Врста животиње","species.all":"Све","species.dog":"Пас","species.cat":"Мачка",
+ "period":"Период","period.all":"Било када","period.7":"Последњих 7 дана","period.30":"Последњих 30 дана",
+ "list":"Огласи","map":"Мапа","view.map":"Мапа","view.list":"Листа","empty":"Нема огласа у овом подручју.","error":"Огласи се нису учитали.","loading":"Учитавање...",
+ "count":"{n} огласа у приказу","unnamed":"Без имена","last_seen":"Виђен/а","approx_location":"Приближна локација (око 100 м)",
+ "contact":"Контакт","description":"Опис","sex":"Пол","sex.male":"Мушки","sex.female":"Женски","sex.unknown":"Непознато",
+ "neutered":"Кастриран/стерилисана","goes_outside":"Излази напоље","yes":"Да","no":"Не","unknown":"Непознато",
+ "close":"Затвори","report":"Пријави оглас","report.reason":"Разлог пријаве","report.send":"Пошаљи пријаву","report.thanks":"Хвала, пријава је послата.","report.error":"Пријава није послата.",
+ "photo.alt":"{kind}, {species}, виђен/а {date}","no_photo":"Нема фотографије","mock":"Демо подаци","skip":"Прескочи на садржај","cluster":"Група од {n} огласа"
+}

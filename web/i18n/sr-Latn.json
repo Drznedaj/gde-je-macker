@@ -1,0 +1,12 @@
+{
+ "tagline":"Mapa izgubljenih i pronađenih ljubimaca","language":"Jezik","filters":"Filteri",
+ "kind":"Vrsta oglasa","kind.all":"Svi","kind.lost":"Izgubljen","kind.found":"Pronađen",
+ "species":"Vrsta životinje","species.all":"Sve","species.dog":"Pas","species.cat":"Mačka",
+ "period":"Period","period.all":"Bilo kada","period.7":"Poslednjih 7 dana","period.30":"Poslednjih 30 dana",
+ "list":"Oglasi","map":"Mapa","view.map":"Mapa","view.list":"Lista","empty":"Nema oglasa u ovom području.","error":"Oglasi se nisu učitali.","loading":"Učitavanje...",
+ "count":"{n} oglasa u prikazu","unnamed":"Bez imena","last_seen":"Viđen/a","approx_location":"Približna lokacija (oko 100 m)",
+ "contact":"Kontakt","description":"Opis","sex":"Pol","sex.male":"Muški","sex.female":"Ženski","sex.unknown":"Nepoznato",
+ "neutered":"Kastriran/sterilisana","goes_outside":"Izlazi napolje","yes":"Da","no":"Ne","unknown":"Nepoznato",
+ "close":"Zatvori","report":"Prijavi oglas","report.reason":"Razlog prijave","report.send":"Pošalji prijavu","report.thanks":"Hvala, prijava je poslata.","report.error":"Prijava nije poslata.",
+ "photo.alt":"{kind}, {species}, viđen/a {date}","no_photo":"Nema fotografije","mock":"Demo podaci","skip":"Preskoči na sadržaj","cluster":"Grupa od {n} oglasa"
+}
