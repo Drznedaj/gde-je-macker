@@ -6,11 +6,14 @@ info:
     v0 contract for the MVP (lost/found posts, map+list, alerts, management by secret token).
     No accounts. Sightings are planned but intentionally absent.
 servers:
-  - url: https://api.example.invalid   # replace with the real domain
+  - url: https://api.example.invalid/api/v1   # replace with the real domain
 paths:
   /healthz:
+    servers:
+      - url: https://api.example.invalid   # root, unversioned
     get:
       summary: Liveness check
+      description: Served at the root (/healthz), not under /api/v1, for load balancers and uptime checks.
       responses:
         "200": { description: OK }
   /photos:

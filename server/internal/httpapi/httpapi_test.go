@@ -80,6 +80,46 @@ func TestPingErrorLogIsSanitized(t *testing.T) {
 	}
 }
 
+func status(h http.Handler, path string) (int, string, string) {
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, httptest.NewRequest("GET", path, nil))
+	return rec.Code, rec.Header().Get("Content-Type"), rec.Body.String()
+}
+
+func TestVersionedRouting(t *testing.T) {
+	h := NewRouter(fakeDB{}, quiet)
+	if c, _, _ := status(h, "/healthz"); c != http.StatusOK {
+		t.Fatalf("/healthz got %d", c)
+	}
+	for _, p := range []string{"/api/v1/healthz", "/posts"} {
+		if c, _, _ := status(h, p); c != http.StatusNotFound {
+			t.Fatalf("%s got %d", p, c)
+		}
+	}
+	c, ct, body := status(h, "/api/v1/nope")
+	if c != http.StatusNotFound || !strings.HasPrefix(ct, "application/json") || !strings.Contains(body, "not_found") {
+		t.Fatalf("got %d %q %q", c, ct, body)
+	}
+}
+
+func TestV1HandlerMountedAndLoggedByPattern(t *testing.T) {
+	var buf bytes.Buffer
+	log := slog.New(slog.NewTextHandler(&buf, nil))
+	h := newRouter(fakeDB{}, log, func(v1 *http.ServeMux) {
+		v1.HandleFunc("GET /posts/{id}", func(w http.ResponseWriter, r *http.Request) {})
+	})
+	const secret = "s3cr3t-T0KEN"
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, httptest.NewRequest("GET", "/api/v1/posts/"+secret+"?q="+secret, nil))
+	if rec.Code != http.StatusOK {
+		t.Fatalf("got %d", rec.Code)
+	}
+	out := buf.String()
+	if strings.Contains(out, secret) || !strings.Contains(out, "/api/v1/posts/{id}") {
+		t.Fatalf("bad log: %s", out)
+	}
+}
+
 // Integration test: skipped when no Postgres is reachable.
 func TestHealthzIntegration(t *testing.T) {
 	url := os.Getenv("DATABASE_URL")
