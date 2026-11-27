@@ -1,7 +1,7 @@
 ---
-description: Run one story end to end: dev agent, PR, QA, review, auto-merge. Usage /ship 003
+description: Run one story end to end: dev agent, PR, QA, review, auto-merge. Usage /story 003
 ---
-Ship story $ARGUMENTS following docs/branching.md. You are the orchestrator; keep your own output short and never paste code.
+Run story $ARGUMENTS following docs/branching.md. You are the orchestrator; keep your own output short and never paste code.
 
 1. `git checkout main && git pull --ff-only`. Read docs/stories/$ARGUMENTS-*.md and pick its Owner agent. If the story lists a dependency that is not merged to main yet, stop and say so.
 2. Run the owner agent on the story. It creates `feature/<id>-<short-name>` from main and commits locally. Require a passing local check (`make test`, plus `make db-reset` if SQL changed).
