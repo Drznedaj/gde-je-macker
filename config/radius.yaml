@@ -1,6 +1,10 @@
 # Alert radius table, version 0 (placeholder values, urban/suburban baseline).
 # Radii in metres. stage1 applies when the post is published; stage2 after 24 hours.
 # Every value must carry an evidence note. Data agent owns this file.
+# Audit 2026-11-27 (story 006): radii unchanged; only confidence ratings and evidence text changed.
+# The audit had no web access, so citations are from the author's recall and are marked
+# "UNVERIFIED" until someone opens the paper and checks the figures. No Serbian/Balkan
+# lost-pet distance data was found or could be searched for: a gap for every value below.
 version: 0
 clamp_m: { min: 200, max: 5000 }
 stage2_after_hours: 24
@@ -8,33 +12,34 @@ base:
   cat_indoor_only:
     stage1_m: 300
     stage2_m: 500
-    confidence: strong
-    evidence: "Huang et al. 2018, Animals 8(1):5: 75% of indoor-only cats found within 137 m."
+    confidence: medium
+    evidence: "Huang et al. 2018 (first author recalled; full author list UNVERIFIED), 'Search methods used to locate missing cats and locations where missing cats are found', Animals 8(1):5, https://www.mdpi.com/2076-2615/8/1/5 . Owner survey of missing cats; study region and sample size UNVERIFIED (a reviewer recalls an Australian study, not US). Recalled figure: 75% of indoor-only cats found within 137 m. UNVERIFIED this session (no web access); downgraded from strong. Stage 1 (300 m) and stage 2 (500 m) are rounded-up safety margins above 137 m, a judgment call. Self-reported distances; study region UNVERIFIED. Serbia/Balkans: no data (gap)."
   cat_outdoor:
     stage1_m: 500
     stage2_m: 1600
-    confidence: strong
-    evidence: "Huang et al. 2018: 75% of cats found within 500 m overall; 75% of outdoor-access cats within 1609 m."
+    confidence: medium
+    evidence: "Huang et al. 2018 (author list UNVERIFIED), Animals 8(1):5 (same paper as above). Recalled: 75% of cats found within 500 m overall; 75% of outdoor-access cats within about 1609 m (1 mile). UNVERIFIED this session; downgraded from strong. Self-reported owner survey; study region and urban/suburban mix UNVERIFIED. Serbia/Balkans: no data (gap)."
   dog:
     stage1_m: 800
     stage2_m: 1600
-    confidence: medium
-    evidence: "Secondary sources citing a large US stray-dog study: about 70% found within 1.6 km. Stage 1 is a judgment call."
+    confidence: weak
+    evidence: "Candidate primary study: Lord, Wittum, Ferketich, Funk, Rajala-Schultz 2007, 'Search and identification methods that owners use to find a lost dog', JAVMA 230(2):211-216, Franklin County, Ohio, US owner survey. The earlier note cited only secondary sources for 'about 70% within 1.6 km'; I could not confirm that this figure appears in the primary paper, so the primary upgrade is NOT achieved and confidence is lowered from medium to weak. Action: read the paper and replace this note with exact figures. Stage 1 (800 m) is a judgment call. Serbia/Balkans: no data (gap); free-roaming and stray dog density in Serbia differs from the US."
 multipliers:
   cat_intact_male:
     value: 1.25
     confidence: weak
-    evidence: "GPS home-range studies of owned cats show intact males range further; not lost-distance data."
+    evidence: "No lost-distance data. Rationale only: GPS home-range studies of owned cats generally report larger ranges for intact males (specific paper not re-verified, UNVERIFIED). The 1.25 magnitude is a judgment call. Serbia/Balkans: no data (gap)."
   dog_rural:
     value: 1.5
     confidence: weak
-    evidence: "Judgment from qualitative guidance (terrain, population density); no numbers found."
+    evidence: "Judgment from qualitative guidance (terrain, population density); no numbers found and no primary study cited. Magnitude 1.5 is a placeholder. Serbia/Balkans: no data (gap). Needs the urban/rural classifier in docs/radius-notes.md before it can be applied."
   cat_rural:
     value: 1.0
-    confidence: medium
-    evidence: "2024 UK GPS study: urban and rural cats had similar home ranges."
+    confidence: weak
+    evidence: "Recalled a 2024 UK GPS tracking study of pet cats finding similar home ranges in urban and rural settings; I could not retrieve its authors, title or link, so it is UNVERIFIED (downgraded from medium). Home range is not lost distance. Serbia/Balkans: no data (gap)."
   dog_sex:
     value: 1.0
     confidence: none
-    evidence: "No data found on distance by sex for dogs."
+    evidence: "No data found on distance by sex for dogs (none searched this session either). Value 1.0 means no adjustment. Serbia/Balkans: no data (gap)."
 # Calibrate from reunion distances (distance + class only) once a few hundred records exist.
+# Run: python3 data/calibrate_radius.py <csv with columns species,distance_m,class>. Never store exact points.
