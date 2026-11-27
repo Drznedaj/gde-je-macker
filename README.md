@@ -27,3 +27,12 @@ docs/        API contract (OpenAPI), ADRs, story files
 See `CONTRIBUTING.md`. Licensed under MIT.
 
 "Gde je Macker" is a name only; this project uses no third-party cartoon characters, artwork or media.
+
+## Local development
+```
+make db-up        # Postgres 16 + PostGIS in Docker (127.0.0.1:5432, user/password/db: macker)
+make db-migrate   # apply migrations
+make db-reset     # wipe and re-apply
+make db-psql      # shell
+```
+Connection string: `postgres://macker:macker@127.0.0.1:5432/macker?sslmode=disable` (local only).
