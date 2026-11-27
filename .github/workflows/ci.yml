@@ -1,0 +1,39 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Migrations apply cleanly
+        env:
+          PGPASSWORD: postgres
+        run: |
+          sed -n '/-- +goose Up/,/-- +goose Down/p' migrations/0001_init.sql | sed '/-- +goose/d' > /tmp/up.sql
+          psql -h localhost -U postgres -v ON_ERROR_STOP=1 -f /tmp/up.sql
+      - name: Validate OpenAPI and YAML config
+        run: |
+          python3 -m pip install --quiet pyyaml openapi-spec-validator
+          python3 -c "import yaml;yaml.safe_load(open('config/radius.yaml'))"
+          openapi-spec-validator docs/api/openapi.yaml
+      - uses: actions/setup-go@v5
+        if: hashFiles('server/go.mod') != ''
+        with:
+          go-version: stable
+      - name: Go vet and test
+        if: hashFiles('server/go.mod') != ''
+        working-directory: server
+        run: |
+          go vet ./...
+          go test ./...

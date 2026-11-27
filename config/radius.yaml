@@ -1,0 +1,40 @@
+# Alert radius table, version 0 (placeholder values, urban/suburban baseline).
+# Radii in metres. stage1 applies when the post is published; stage2 after 24 hours.
+# Every value must carry an evidence note. Data agent owns this file.
+version: 0
+clamp_m: { min: 200, max: 5000 }
+stage2_after_hours: 24
+base:
+  cat_indoor_only:
+    stage1_m: 300
+    stage2_m: 500
+    confidence: strong
+    evidence: "Huang et al. 2018, Animals 8(1):5: 75% of indoor-only cats found within 137 m."
+  cat_outdoor:
+    stage1_m: 500
+    stage2_m: 1600
+    confidence: strong
+    evidence: "Huang et al. 2018: 75% of cats found within 500 m overall; 75% of outdoor-access cats within 1609 m."
+  dog:
+    stage1_m: 800
+    stage2_m: 1600
+    confidence: medium
+    evidence: "Secondary sources citing a large US stray-dog study: about 70% found within 1.6 km. Stage 1 is a judgment call."
+multipliers:
+  cat_intact_male:
+    value: 1.25
+    confidence: weak
+    evidence: "GPS home-range studies of owned cats show intact males range further; not lost-distance data."
+  dog_rural:
+    value: 1.5
+    confidence: weak
+    evidence: "Judgment from qualitative guidance (terrain, population density); no numbers found."
+  cat_rural:
+    value: 1.0
+    confidence: medium
+    evidence: "2024 UK GPS study: urban and rural cats had similar home ranges."
+  dog_sex:
+    value: 1.0
+    confidence: none
+    evidence: "No data found on distance by sex for dogs."
+# Calibrate from reunion distances (distance + class only) once a few hundred records exist.
