@@ -2,8 +2,8 @@
 
 Thanks for helping reunite pets with their families.
 
-1. Open an issue or pick a story from `docs/stories/`.
-2. Branch from `main` as `feature/<story-id>-<short-name>` (see docs/branching.md), keep changes small and inside one area (`server`, `web`, `data`, `infra`, `mobile`).
+1. Open an issue describing the bug or idea before you start, so we can agree on scope.
+2. Branch from `main` as `feature/fix-<short-name>` or `feature/chore-<short-name>` (see docs/branching.md), keep changes small and inside one area (`server`, `web`, `data`, `infra`, `mobile`).
 3. Add or update tests. Run the checks listed in `CLAUDE.md`.
 4. Sign off every commit (`git commit -s`). By signing off you certify the Developer Certificate of Origin (https://developercertificate.org). No CLA.
 5. Open a pull request describing what changed and how you tested it.

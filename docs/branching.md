@@ -7,7 +7,7 @@
   Not tied to a story (docs, CI, chores): `feature/chore-<short-name>`. Fixes: `feature/fix-<short-name>`.
 - A separate dev/staging environment, when we have one, is deployed from a feature branch or a tag, not from a `develop` branch.
 
-`<story-id>` is the three-digit number of the file in `docs/stories/`. `<short-name>` is 2-4 lowercase words joined by hyphens.
+`<story-id>` is the three-digit story number assigned by the maintainers (stories are kept outside the repo). Outside contributors: open an issue first and use `feature/fix-<short-name>` or `feature/chore-<short-name>`. `<short-name>` is 2-4 lowercase words joined by hyphens.
 
 ## Commits
 - One short plain sentence in the imperative describing the change, for example `Add healthz endpoint with db check`. No prefixes or ticket numbers (the branch carries the story id).
@@ -20,7 +20,7 @@ Max two fix rounds per story; after that the PM (chat) re-scopes the story. Rele
 
 ## Pull requests
 - Title: story id and name, for example `003 Server skeleton`.
-- Body: link to the story file, the dev agent's report (under 200 words), anything not done.
+- Body: the story id, the dev agent's report (under 200 words), anything not done. PRs are for code only; never open a PR that only adds stories, reports or notes.
 - One story per PR. Rebase on `main` before opening if it moved.
 
 ## Branch protection (GitHub ruleset on `main`)
