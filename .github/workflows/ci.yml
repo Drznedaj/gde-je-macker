@@ -1,10 +1,11 @@
-name: ci
+name: Database, API spec and Go checks
 on:
   push:
     branches: [main]
   pull_request:
 jobs:
-  checks:
+  verify:
+    name: Migrations, OpenAPI/config validation, Go tests
     runs-on: ubuntu-latest
     services:
       postgres:
