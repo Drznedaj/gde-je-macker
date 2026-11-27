@@ -15,15 +15,30 @@ Project: Gde je Macker, a free open-source lost-pet map + alerts app for Serbia.
 Go (stdlib net/http or chi, pgx, sqlc, goose-style SQL migrations) · Postgres 16 + PostGIS · vanilla ES-module JS (no framework), MapLibre GL, service worker · Capacitor for native shells.
 
 ## Token-saving rules
-1. Work from the story file. Read only files it names. No whole-repo scans.
+1. Work from the story file (`../pm/stories/NNN-*.md`). Read only files it names. No whole-repo scans.
 2. Run linters/tests/codegen as commands and read only failures.
-3. Report in under 200 words: summary, files touched, open questions. No pasted code.
-4. One story per session. State lives in story files, `docs/api/openapi.yaml`, ADRs and Trello.
+3. Report in under 200 words to `../pm/reports/NNN.md`: summary, files touched, open questions. No pasted code.
+4. One story per session. State lives in `../pm/` (stories, reports), `docs/api/openapi.yaml`, ADRs and Trello.
 5. Max two fix rounds per PR, then stop and ask the human.
 6. Prefer the standard library and tiny dependencies. Use scripts, not LLM calls, for deterministic work.
 
 ## Flow
-PM writes `docs/stories/NNN-*.md` -> dev agent implements on a branch -> QA agent tests against the acceptance criteria -> reviewer (read-only) comments -> auto-merge when checks and verdicts pass, otherwise the human. Run it with `/story <story-id>` (`.claude/commands/story.md`). Production deploys are manual. Full rules: docs/branching.md.
+PM writes `../pm/stories/NNN-*.md` -> dev agent implements on a branch -> QA agent tests against the acceptance criteria -> reviewer (read-only) comments -> auto-merge when checks and verdicts pass, otherwise the human. Run it with `/story <story-id>` (`.claude/commands/story.md`). Production deploys are manual. Full rules: `../pm/WORKFLOW.md` and docs/branching.md.
+
+### Where things live
+- `../pm/` (next to the repo, never committed): stories, reports, spike notes, ADR drafts.
+- Repo: code, migrations, `docs/api/openapi.yaml`, accepted ADRs, `CLAUDE.md`, CI, `config/radius.yaml`.
+- Trello holds status and decisions; Claude project docs hold long-form research.
+
+### Story lifecycle
+1. Owner runs `/story NNN`; the agent reads `../pm/stories/NNN-*.md` and works on `feature/NNN-*`.
+2. The agent writes its report to `../pm/reports/NNN.md` (not committed, never in a PR).
+3. QA and reviewer post PASS/FAIL as PR comments. Max 2 fix rounds, then stop and ask the PM.
+
+### PR and merge rules
+- PRs are for code only. No PR for stories, reports, spikes or ADR drafts; an ADR ships in the PR of the story that implements it.
+- Auto-merge (squash) when both verdicts PASS and CI is green.
+- Label `needs-human` and wait when the diff touches `migrations/`, `.github/`, `.claude/`, `CLAUDE.md`, `config/radius.yaml`, `docs/adr/`, `LICENSE`, or code handling manage tokens, photo storage or contact/message data.
 
 ## Commits
 Use the repo-local git identity (GitHub no-reply). Sign off commits (`-s`). Branch yourself: `feature/<story-id>-<short-name>` from the latest `main` (see docs/branching.md). Commit message = one short imperative sentence. Agents may push `feature/*` branches and open PRs; never push or commit to `main`, never force-push, never merge with admin override.

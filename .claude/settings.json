@@ -9,7 +9,8 @@
       "Bash(gh pr comment*)", "Bash(gh pr edit*)", "Bash(gh pr list*)",
       "Bash(gh pr merge --auto --squash --delete-branch*)",
       "Bash(gh run list*)", "Bash(gh run view*)", "Bash(gh auth status*)",
-      "Bash(make *)", "Bash(go *)", "Bash(python3 *)"
+      "Bash(make *)", "Bash(go *)", "Bash(python3 *)",
+      "Read(../pm/**)", "Edit(../pm/reports/**)", "Write(../pm/reports/**)"
     ],
     "deny": [
       "Bash(git push origin main*)", "Bash(git push * main*)", "Bash(git push --force*)",
