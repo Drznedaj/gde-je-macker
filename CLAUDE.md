@@ -23,7 +23,7 @@ Go (stdlib net/http or chi, pgx, sqlc, goose-style SQL migrations) · Postgres 1
 6. Prefer the standard library and tiny dependencies. Use scripts, not LLM calls, for deterministic work.
 
 ## Flow
-PM writes `../pm/stories/NNN-*.md` -> dev agent implements on a branch -> QA agent tests against the acceptance criteria -> reviewer (read-only) comments -> auto-merge when checks and verdicts pass, otherwise the human. Run it with `/story <story-id>` (`.claude/commands/story.md`). Production deploys are manual. Full rules: `../pm/WORKFLOW.md` and docs/branching.md.
+PM writes `../pm/stories/NNN-*.md` -> dev agent implements on a branch -> QA agent tests against the acceptance criteria -> reviewer (read-only) comments -> auto-merge when checks and verdicts pass, otherwise the human. Run it with `/story <story-id>` (`.claude/commands/story.md`). Production deploys are manual. Full rules: `../pm/WORKFLOW.md` and docs/branching.md. Several stories can run at once, each in its own worktree (../pm/WORKFLOW.md section 8)
 
 ### Where things live
 - `../pm/` (next to the repo, never committed): stories, reports, spike notes, ADR drafts.
