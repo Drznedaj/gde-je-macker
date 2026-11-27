@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="sr-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gde je Macker</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#list-panel" data-i18n="skip">Skip to content</a>
+<header class="top">
+  <h1 id="brand"></h1>
+  <span id="mock-badge" class="badge" hidden data-i18n="mock"></span>
+  <label class="lang"><span class="sr" data-i18n="language"></span>
+    <select id="lang" data-i18n-label="language">
+      <option value="sr-Latn">Srpski (lat)</option>
+      <option value="sr-Cyrl">Српски (ћир)</option>
+      <option value="en">English</option>
+    </select>
+  </label>
+</header>
+<section class="filters" aria-label="Filters" data-i18n-label="filters">
+  <label><span data-i18n="kind"></span>
+    <select id="f-kind"><option value="" data-i18n="kind.all"></option><option value="lost" data-i18n="kind.lost"></option><option value="found" data-i18n="kind.found"></option></select></label>
+  <label><span data-i18n="species"></span>
+    <select id="f-species"><option value="" data-i18n="species.all"></option><option value="dog" data-i18n="species.dog"></option><option value="cat" data-i18n="species.cat"></option></select></label>
+  <label><span data-i18n="period"></span>
+    <select id="f-days"><option value="" data-i18n="period.all"></option><option value="7" data-i18n="period.7"></option><option value="30" data-i18n="period.30"></option></select></label>
+</section>
+<nav class="tabs" aria-label="View">
+  <button id="tab-map" aria-pressed="true" data-i18n="view.map"></button>
+  <button id="tab-list" aria-pressed="false" data-i18n="view.list"></button>
+</nav>
+<main>
+  <div id="map" role="region" data-i18n-label="map"></div>
+  <aside id="list-panel" tabindex="-1">
+    <p id="status" role="status" aria-live="polite"></p>
+    <ul id="list"></ul>
+  </aside>
+</main>
+<dialog id="detail" aria-labelledby="d-title"></dialog>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/pmtiles@3.2.0/dist/pmtiles.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

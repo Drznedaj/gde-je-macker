@@ -1,0 +1,12 @@
+{
+ "tagline":"Map of lost and found pets","language":"Language","filters":"Filters",
+ "kind":"Type","kind.all":"All","kind.lost":"Lost","kind.found":"Found",
+ "species":"Species","species.all":"All","species.dog":"Dog","species.cat":"Cat",
+ "period":"Period","period.all":"Any time","period.7":"Last 7 days","period.30":"Last 30 days",
+ "list":"Posts","map":"Map","view.map":"Map","view.list":"List","empty":"No posts in this area.","error":"Could not load posts.","loading":"Loading...",
+ "count":"{n} posts in view","unnamed":"Unnamed","last_seen":"Last seen","approx_location":"Approximate location (about 100 m)",
+ "contact":"Contact","description":"Description","sex":"Sex","sex.male":"Male","sex.female":"Female","sex.unknown":"Unknown",
+ "neutered":"Neutered","goes_outside":"Goes outside","yes":"Yes","no":"No","unknown":"Unknown",
+ "close":"Close","report":"Report this post","report.reason":"Reason for the report","report.send":"Send report","report.thanks":"Thank you, the report was sent.","report.error":"Could not send the report.",
+ "photo.alt":"{kind} {species}, last seen {date}","no_photo":"No photo","mock":"Demo data","skip":"Skip to content","cluster":"Cluster of {n} posts"
+}
