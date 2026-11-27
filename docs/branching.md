@@ -14,14 +14,14 @@
 - Sign off every commit (`git commit -s`, DCO). Keep commits small; several per story is normal.
 
 ## Who does what
-Automated with `/story <story-id>` (see `.claude/commands/story.md`): dev agent branches, commits and pushes; PR is opened with `gh`; qa and reviewer agents post PASS/FAIL verdicts as PR comments; the PR auto-merges (squash) when both pass and required checks are green. PRs touching sensitive paths (migrations, CI, agent config, radius config, ADRs, token/photo/contact handling) get the `needs-human` label and wait for the owner. The owner spot-checks merged PRs at sprint end.
+Automated with `/story <story-id>` (see `.claude/commands/story.md`): dev agent branches, commits and pushes; PR is opened with `gh`; qa and reviewer agents post PASS/FAIL verdicts as PR comments; the PR auto-merges (squash) when both pass and required checks are green. PRs touching sensitive paths (migrations, CI, agent config, radius config, ADRs, token/photo/contact handling) get the `needs-human` label and wait for the owner. The owner spot-checks merged PRs at sprint end. needs-human PRs don't block other stories; only stories that depend on them wait."
 
 Max two fix rounds per story; after that the PM (chat) re-scopes the story. Releases are tags (`vX.Y.Z`) on `main`.
 
 ## Pull requests
 - Title: story id and name, for example `003 Server skeleton`.
 - Body: the story id, the dev agent's report (under 200 words), anything not done. PRs are for code only; never open a PR that only adds stories, reports or notes.
-- One story per PR. Rebase on `main` before opening if it moved.
+- One story per PR. Merge origin/main into the branch if main moved (never rebase; force-push is blocked).
 
 ## Branch protection (GitHub ruleset on `main`)
 Restrict deletions, require linear history, require a pull request (0 approvals while there is one human; squash merge only), require status check `Migrations, OpenAPI/config validation, Go tests` with branches up to date, block force pushes. Delete feature branches after merge.
