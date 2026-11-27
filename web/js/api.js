@@ -58,3 +58,85 @@ export async function reportPost(id, reason) {
   if (res.status !== 202) throw new Error(`HTTP ${res.status}`);
   return true;
 }
+
+// ---- Create / manage (token goes in the X-Manage-Token header; never logged) ----
+export class ApiError extends Error {
+  constructor(status) { super(`HTTP ${status}`); this.status = status; }
+}
+
+const mockPhotos = new Map(); // photo id -> object URL (mock only)
+const mockTokens = new Map(); // post id -> token (mock only)
+const post = (id) => encodeURIComponent(id);
+const jsonReq = (token, body, method = 'POST') => ({
+  method,
+  headers: { 'Content-Type': 'application/json', ...(token ? { 'X-Manage-Token': token } : {}) },
+  body: body === undefined ? undefined : JSON.stringify(body),
+});
+
+async function mockManage(id, token) {
+  const p = (await fixtures()).find((x) => x.id === id);
+  if (!p) throw new ApiError(404);
+  if (mockTokens.get(id) !== token) throw new ApiError(401);
+  return p;
+}
+
+/** @param {Blob} blob already downscaled */
+export async function uploadPhoto(blob) {
+  if (MOCK) {
+    const id = crypto.randomUUID();
+    const url = URL.createObjectURL(blob);
+    mockPhotos.set(id, url);
+    return { id, url };
+  }
+  const fd = new FormData();
+  fd.append('file', blob, 'photo.jpg');
+  const res = await fetch(`${API_BASE}/photos`, { method: 'POST', body: fd });
+  if (res.status !== 201) throw new ApiError(res.status);
+  return res.json();
+}
+
+/** Returns the created post including manage_token (shown once). */
+export async function createPost(body) {
+  if (MOCK) {
+    const { photo_ids, ...rest } = body;
+    const now = Date.now();
+    const p = { ...rest, id: crypto.randomUUID(), radius_m: 1000, status: 'active',
+      photos: (photo_ids ?? []).map((id) => ({ id, url: mockPhotos.get(id) ?? '' })),
+      created_at: new Date(now).toISOString(), expires_at: new Date(now + 30 * 864e5).toISOString() };
+    (await fixtures()).push(p);
+    const manage_token = [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, '0')).join('');
+    mockTokens.set(p.id, manage_token);
+    return { ...p, manage_token };
+  }
+  const res = await fetch(`${API_BASE}/posts`, jsonReq(null, body));
+  if (res.status !== 201) throw new ApiError(res.status);
+  return res.json();
+}
+
+/** Only description, contact and photo_ids are editable. */
+export async function updatePost(id, token, patch) {
+  if (MOCK) {
+    const p = await mockManage(id, token);
+    const { photo_ids, ...rest } = patch;
+    Object.assign(p, rest);
+    if (photo_ids) p.photos = photo_ids.map((pid) => p.photos.find((x) => x.id === pid) ?? { id: pid, url: mockPhotos.get(pid) ?? '' });
+    return;
+  }
+  const res = await fetch(`${API_BASE}/posts/${post(id)}`, jsonReq(token, patch, 'PATCH'));
+  if (!res.ok) throw new ApiError(res.status);
+}
+
+export async function renewPost(id, token) {
+  if (MOCK) {
+    (await mockManage(id, token)).expires_at = new Date(Date.now() + 30 * 864e5).toISOString();
+    return;
+  }
+  const res = await fetch(`${API_BASE}/posts/${post(id)}/renew`, jsonReq(token));
+  if (!res.ok) throw new ApiError(res.status);
+}
+
+export async function reunitePost(id, token) {
+  if (MOCK) { (await mockManage(id, token)).status = 'reunited'; return; }
+  const res = await fetch(`${API_BASE}/posts/${post(id)}/reunite`, jsonReq(token, {}));
+  if (!res.ok) throw new ApiError(res.status);
+}
