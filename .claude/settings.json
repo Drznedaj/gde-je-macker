@@ -9,14 +9,15 @@
       "Bash(gh pr comment*)", "Bash(gh pr edit*)", "Bash(gh pr list*)",
       "Bash(gh pr merge --auto --squash --delete-branch*)",
       "Bash(gh run list*)", "Bash(gh run view*)", "Bash(gh auth status*)",
-      "Bash(make *)", "Bash(go *)", "Bash(python3 *)",
-      "Read(../pm/**)", "Edit(../pm/reports/**)", "Write(../pm/reports/**)"
+      "Bash(make *)", "Bash(go *)", "Bash(python3 *)"
     ],
     "deny": [
       "Bash(git push origin main*)", "Bash(git push * main*)", "Bash(git push --force*)",
       "Bash(git push -f*)", "Bash(git push --delete*)", "Bash(git reset --hard*)",
       "Bash(gh pr merge --admin*)", "Bash(gh pr merge --squash --admin*)",
       "Bash(gh api*)", "Bash(gh repo*)", "Bash(gh secret*)", "Bash(rm -rf*)"
-    ]
+    ],
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": ["../pm"]
   }
 }
