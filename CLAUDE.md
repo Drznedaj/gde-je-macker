@@ -23,10 +23,10 @@ Go (stdlib net/http or chi, pgx, sqlc, goose-style SQL migrations) · Postgres 1
 6. Prefer the standard library and tiny dependencies. Use scripts, not LLM calls, for deterministic work.
 
 ## Flow
-PM writes `docs/stories/NNN-*.md` -> dev agent implements on a branch -> QA agent tests against the acceptance criteria -> reviewer (read-only) comments -> human merges. Production deploys are manual.
+PM writes `docs/stories/NNN-*.md` -> dev agent implements on a branch -> QA agent tests against the acceptance criteria -> reviewer (read-only) comments -> human merges. Production deploys are manual. Full rules: docs/branching.md.
 
 ## Commits
-Use the repo-local git identity (GitHub no-reply). Sign off commits (`-s`). Never push; the human pushes.
+Use the repo-local git identity (GitHub no-reply). Sign off commits (`-s`). Branch yourself: `feature/<story-id>-<short-name>` from the latest `develop` (see docs/branching.md). Commit message = one short imperative sentence. Never push and never commit to `main` or `develop`; the human pushes and opens the PR.
 
 ## Local environment
 - Docker runs through Rancher Desktop; use `make db-up` / `make db-migrate` (the Makefile detects `docker compose` vs `docker-compose`).

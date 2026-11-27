@@ -1,7 +1,7 @@
 name: Database, API spec and Go checks
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
 jobs:
   verify:
