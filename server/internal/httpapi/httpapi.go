@@ -23,11 +23,12 @@ type Pinger interface {
 // /healthz lives on the root mux, unversioned. Everything else is served by a
 // versioned sub-mux mounted at /api/v1/; handlers registered on it use paths
 // relative to that prefix (for example "GET /posts").
-func NewRouter(db Pinger, log *slog.Logger) http.Handler {
-	return newRouter(db, log, nil)
+//
+// mountV1 (may be nil) registers the API routes on the versioned mux.
+func NewRouter(db Pinger, log *slog.Logger, mountV1 func(v1 *http.ServeMux)) http.Handler {
+	return newRouter(db, log, mountV1)
 }
 
-// newRouter is NewRouter with a hook to register handlers on the v1 mux.
 func newRouter(db Pinger, log *slog.Logger, mountV1 func(v1 *http.ServeMux)) http.Handler {
 	v1 := http.NewServeMux()
 	if mountV1 != nil {

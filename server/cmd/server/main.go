@@ -15,6 +15,7 @@ import (
 	"github.com/Drznedaj/gde-je-macker/server/internal/config"
 	"github.com/Drznedaj/gde-je-macker/server/internal/db"
 	"github.com/Drznedaj/gde-je-macker/server/internal/httpapi"
+	"github.com/Drznedaj/gde-je-macker/server/internal/posts"
 )
 
 func main() {
@@ -39,9 +40,12 @@ func run(log *slog.Logger) error {
 	}
 	defer pool.Close()
 
+	api := posts.New(pool, cfg.PhotoDir, log)
+	go api.RunExpiry(ctx, time.Minute)
+
 	srv := &http.Server{
 		Addr:              ":" + cfg.Port,
-		Handler:           httpapi.NewRouter(pool, log),
+		Handler:           httpapi.NewRouter(pool, log, api.Mount),
 		ReadHeaderTimeout: cfg.ReadHeaderTimeout,
 		ReadTimeout:       cfg.ReadTimeout,
 		WriteTimeout:      cfg.WriteTimeout,

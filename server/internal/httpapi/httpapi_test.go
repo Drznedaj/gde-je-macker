@@ -2,7 +2,6 @@ package httpapi
 
 import (
 	"bytes"
-	"strings"
 	"context"
 	"errors"
 	"io"
@@ -10,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -25,7 +25,7 @@ var quiet = slog.New(slog.NewTextHandler(io.Discard, nil))
 func get(t *testing.T, p Pinger) int {
 	t.Helper()
 	rec := httptest.NewRecorder()
-	NewRouter(p, quiet).ServeHTTP(rec, httptest.NewRequest("GET", "/healthz", nil))
+	NewRouter(p, quiet, nil).ServeHTTP(rec, httptest.NewRequest("GET", "/healthz", nil))
 	return rec.Code
 }
 
@@ -65,7 +65,7 @@ func TestPingErrorLogIsSanitized(t *testing.T) {
 	dsn := "postgres://macker:hunter2@db.internal.example:5432/macker"
 	pingErr := errors.New("failed to connect to " + dsn + ": password hunter2 host db.internal.example")
 	rec := httptest.NewRecorder()
-	NewRouter(fakeDB{err: pingErr}, log).ServeHTTP(rec, httptest.NewRequest("GET", "/healthz", nil))
+	NewRouter(fakeDB{err: pingErr}, log, nil).ServeHTTP(rec, httptest.NewRequest("GET", "/healthz", nil))
 	out := buf.String()
 	for _, bad := range []string{"hunter2", "db.internal.example", "postgres://", "macker:"} {
 		if strings.Contains(out, bad) {
@@ -87,7 +87,7 @@ func status(h http.Handler, path string) (int, string, string) {
 }
 
 func TestVersionedRouting(t *testing.T) {
-	h := NewRouter(fakeDB{}, quiet)
+	h := NewRouter(fakeDB{}, quiet, nil)
 	if c, _, _ := status(h, "/healthz"); c != http.StatusOK {
 		t.Fatalf("/healthz got %d", c)
 	}
