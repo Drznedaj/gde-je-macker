@@ -15,7 +15,7 @@ Status: proposal only, nothing implemented. Sizes and licences below are from me
 
 ## Recommendation (simplest)
 
-Option 1, precomputed offline: a script in `data/` reads the GHSL SMOD raster for Serbia once and writes a small lookup table keyed by geohash cell (precision matching the alert cells, about 5 characters) with a single class: `urban` or `rural`. Cell class = class of the cell centre pixel (or majority if cheap). The server loads this file at start, so there is no runtime dependency, no raster library in Go, and no per-request cost. Estimated size for Serbia at precision 5: tens of thousands of cells, well under 1 MB. Attribution: JRC GHSL, CC BY 4.0, noted in the app credits.
+Option 1, precomputed offline: a script in `data/` reads the GHSL SMOD raster for Serbia once and writes a small lookup table keyed by geohash cell (precision matching the alert cells, about 5 characters; a precision-5 cell is roughly 4.9 x 4.9 km, about 24 km2) with a single class: `urban` or `rural`. Cell class = class of the cell centre pixel (or majority if cheap). The server loads this file at start, so there is no runtime dependency, no raster library in Go, and no per-request cost. Estimated size for Serbia at precision 5: Serbia is about 88,000 km2, so roughly 4,000 to 5,000 cells at precision 5 (order of tens of KB, well under 1 MB). Attribution: JRC GHSL, CC BY 4.0, noted in the app credits.
 
 Fallback if SMOD proves too coarse: OSM `landuse=residential|commercial|industrial` plus `place` tags from the Geofabrik extract, processed with the same offline script and output format.
 

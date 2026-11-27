@@ -13,12 +13,12 @@ base:
     stage1_m: 300
     stage2_m: 500
     confidence: medium
-    evidence: "Huang, Lord et al. 2018, 'Search methods used to locate missing cats and locations where missing cats are found', Animals 8(1):5, https://www.mdpi.com/2076-2615/8/1/5 . US owner survey of missing cats (about 1,200 cats). Recalled figure: 75% of indoor-only cats found within 137 m. UNVERIFIED this session (no web access); downgraded from strong. Stage 1 (300 m) and stage 2 (500 m) are rounded-up safety margins above 137 m, a judgment call. Self-reported distances, US sample. Serbia/Balkans: no data (gap)."
+    evidence: "Huang et al. 2018 (first author recalled; full author list UNVERIFIED), 'Search methods used to locate missing cats and locations where missing cats are found', Animals 8(1):5, https://www.mdpi.com/2076-2615/8/1/5 . Owner survey of missing cats; study region and sample size UNVERIFIED (a reviewer recalls an Australian study, not US). Recalled figure: 75% of indoor-only cats found within 137 m. UNVERIFIED this session (no web access); downgraded from strong. Stage 1 (300 m) and stage 2 (500 m) are rounded-up safety margins above 137 m, a judgment call. Self-reported distances; study region UNVERIFIED. Serbia/Balkans: no data (gap)."
   cat_outdoor:
     stage1_m: 500
     stage2_m: 1600
     confidence: medium
-    evidence: "Huang, Lord et al. 2018, Animals 8(1):5 (same paper as above). Recalled: 75% of cats found within 500 m overall; 75% of outdoor-access cats within about 1609 m (1 mile). UNVERIFIED this session; downgraded from strong. Self-reported owner survey, US sample, mostly urban/suburban. Serbia/Balkans: no data (gap)."
+    evidence: "Huang et al. 2018 (author list UNVERIFIED), Animals 8(1):5 (same paper as above). Recalled: 75% of cats found within 500 m overall; 75% of outdoor-access cats within about 1609 m (1 mile). UNVERIFIED this session; downgraded from strong. Self-reported owner survey; study region and urban/suburban mix UNVERIFIED. Serbia/Balkans: no data (gap)."
   dog:
     stage1_m: 800
     stage2_m: 1600

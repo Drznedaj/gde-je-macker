@@ -23,9 +23,18 @@ def nearest_rank(sorted_vals, p):
 
 def summarize(rows):
     groups = {}
-    for r in rows:
-        key = f"{r['species']}/{r['class']}"
-        groups.setdefault(key, []).append(float(r["distance_m"]))
+    for i, r in enumerate(rows, start=2):
+        try:
+            sp, cl, raw = r["species"], r["class"], r["distance_m"]
+            if not sp or not cl or raw is None:
+                raise ValueError("missing value")
+            d = float(raw)
+            if math.isnan(d) or math.isinf(d) or d < 0:
+                raise ValueError("distance must be a finite number >= 0")
+        except (KeyError, TypeError, ValueError) as e:
+            print(f"skipping line {i}: {e!r}", file=sys.stderr)
+            continue
+        groups.setdefault(f"{sp}/{cl}", []).append(d)
     out = {}
     for key in sorted(groups):
         vals = sorted(groups[key])
