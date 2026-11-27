@@ -18,5 +18,8 @@ export const MAP = {
   fallbackAttribution: '© OpenStreetMap contributors',
 };
 
+// Rough Serbia box for the client-side pin check (the server does the exact check).
+export const SERBIA_BOX = { south: 42.2, north: 46.2, west: 18.8, east: 23.05 };
+
 export const API_BASE = '/api/v1';
 export const DEBOUNCE_MS = 300;

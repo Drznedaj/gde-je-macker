@@ -1,5 +1,6 @@
 import { BRAND, MAP, DEBOUNCE_MS } from './config.js';
 import { listPosts, getPost, reportPost, MOCK } from './api.js';
+import { initPostForm, isPicking, manageButton } from './postform.js';
 import { initI18n, setLang, getLang, t, apply, formatDate } from './i18n.js';
 
 const $ = (id) => document.getElementById(id);
@@ -126,6 +127,7 @@ const photoAlt = (p) => t('photo.alt', { kind: t('kind.' + p.kind), species: t('
 const tri = (v) => t(v ?? 'unknown');
 
 async function openDetail(id) {
+  if (isPicking()) return;
   const p = posts.find((x) => x.id === id) ?? (await getPost(id));
   if (!p) return;
   const dlg = $('detail');
@@ -156,7 +158,8 @@ async function openDetail(id) {
   reportBtn.addEventListener('click', () => { form.hidden = false; reason.focus(); });
   const close = el('button', { type: 'button' }, t('close'));
   close.addEventListener('click', () => dlg.close());
-  dlg.replaceChildren(title, photos, dl, el('div', { className: 'row' }, reportBtn, close), form);
+  const manage = manageButton(p.id, () => dlg.close());
+  dlg.replaceChildren(title, photos, dl, el('div', { className: 'row' }, reportBtn, manage, close), form);
   if (!dlg.open) dlg.showModal();
 }
 
@@ -178,6 +181,7 @@ function init() {
   $('tab-list').addEventListener('click', () => setView('list'));
   setView('map');
   initMap();
+  initPostForm({ getMap: () => map, onChanged: () => load() });
 }
 
 await initI18n();

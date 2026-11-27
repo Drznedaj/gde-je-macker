@@ -12,6 +12,7 @@
 <header class="top">
   <h1 id="brand"></h1>
   <span id="mock-badge" class="badge" hidden data-i18n="mock"></span>
+  <button id="new-post" type="button" class="primary" data-i18n="post.new"></button>
   <label class="lang"><span class="sr" data-i18n="language"></span>
     <select id="lang" data-i18n-label="language">
       <option value="sr-Latn">Srpski (lat)</option>
@@ -40,6 +41,69 @@
   </aside>
 </main>
 <dialog id="detail" aria-labelledby="d-title"></dialog>
+<div id="pick-bar" class="pickbar" hidden>
+  <p id="pick-msg" role="status" aria-live="polite" data-i18n="pick.hint"></p>
+  <button id="pick-ok" type="button" class="primary" data-i18n="pick.confirm" disabled></button>
+  <button id="pick-cancel" type="button" data-i18n="cancel"></button>
+</div>
+<dialog id="post-dlg" aria-labelledby="pf-title">
+  <form id="post-form" novalidate>
+    <h2 id="pf-title" data-i18n="post.new"></h2>
+    <p id="pf-summary" class="err" role="alert" tabindex="-1"></p>
+    <fieldset>
+      <legend data-i18n="kind"></legend>
+      <label class="inline"><input type="radio" name="kind" value="lost" checked> <span data-i18n="kind.lost"></span></label>
+      <label class="inline"><input type="radio" name="kind" value="found"> <span data-i18n="kind.found"></span></label>
+    </fieldset>
+    <label><span data-i18n="species"></span>
+      <select name="species"><option value="dog" data-i18n="species.dog"></option><option value="cat" data-i18n="species.cat"></option></select></label>
+    <label><span data-i18n="name"></span>
+      <input name="name" maxlength="80" autocomplete="off" aria-describedby="e-name"></label>
+    <span id="e-name" class="err"></span>
+    <div class="grid3">
+      <label><span data-i18n="sex"></span>
+        <select name="sex"><option value="unknown" data-i18n="sex.unknown"></option><option value="male" data-i18n="sex.male"></option><option value="female" data-i18n="sex.female"></option></select></label>
+      <label><span data-i18n="neutered"></span>
+        <select name="neutered"><option value="unknown" data-i18n="unknown"></option><option value="yes" data-i18n="yes"></option><option value="no" data-i18n="no"></option></select></label>
+      <label><span data-i18n="goes_outside"></span>
+        <select name="goes_outside"><option value="unknown" data-i18n="unknown"></option><option value="yes" data-i18n="yes"></option><option value="no" data-i18n="no"></option></select></label>
+    </div>
+    <label><span data-i18n="description"></span>
+      <textarea name="description" rows="4" maxlength="2000" aria-describedby="e-description"></textarea></label>
+    <span id="e-description" class="err"></span>
+    <fieldset>
+      <legend data-i18n="post.where"></legend>
+      <div class="row"><button type="button" id="pin-btn" data-i18n="post.pick"></button><span id="pin-text" role="status"></span></div>
+      <span id="e-pin" class="err"></span>
+      <label><span data-i18n="last_seen"></span>
+        <input type="datetime-local" name="last_seen_at" aria-describedby="e-when"></label>
+      <span id="e-when" class="err"></span>
+    </fieldset>
+    <label><span data-i18n="post.contact"></span>
+      <input name="contact" maxlength="200" autocomplete="off" aria-describedby="e-contact h-contact"></label>
+    <small id="h-contact" data-i18n="post.contact_public"></small>
+    <span id="e-contact" class="err"></span>
+    <fieldset>
+      <legend data-i18n="post.photos"></legend>
+      <input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp" multiple>
+      <small data-i18n="post.photos_hint"></small>
+      <span id="e-photos" class="err"></span>
+      <ul id="photo-list" class="thumbs"></ul>
+    </fieldset>
+    <div class="row">
+      <button type="submit" class="primary" id="pf-submit" data-i18n="post.submit"></button>
+      <button type="button" id="pf-cancel" data-i18n="cancel"></button>
+    </div>
+  </form>
+</dialog>
+<dialog id="token-dlg" aria-labelledby="tk-title">
+  <h2 id="tk-title" data-i18n="token.title"></h2>
+  <p data-i18n="token.warn"></p>
+  <label><span data-i18n="token.link"></span> <input id="tk-link" readonly></label>
+  <div class="row"><button type="button" id="tk-copy" data-i18n="token.copy"></button><span id="tk-msg" role="status"></span></div>
+  <div class="row"><button type="button" id="tk-done" class="primary" data-i18n="token.done"></button></div>
+</dialog>
+<dialog id="manage-dlg" aria-labelledby="mg-title"></dialog>
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/pmtiles@3.2.0/dist/pmtiles.js"></script>
 <script type="module" src="js/main.js"></script>
